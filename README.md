@@ -6,9 +6,9 @@
 
 ```bash
 # Install globally via npm:
-npm install -g clean-node-modules
+npm install -g clean-node-module
 # Or use npx without install:
-npx clean-node-modules <action> [path]
+npx clean-node-module <action> [path]
 ```
 
 ---
@@ -30,7 +30,7 @@ All commands accept an optional `[path]` argument. If omitted, the script runs a
 ### 1. Display Sizes
 
 ```bash
-clean-node-modules size ./my-project
+clean-node-module size ./my-project
 ```
 
 Outputs the size of each `node_modules` directory under `./my-project`, in MB.
@@ -38,7 +38,7 @@ Outputs the size of each `node_modules` directory under `./my-project`, in MB.
 ### 2. Count Folders
 
 ```bash
-clean-node-modules count /path/to/repo
+clean-node-module count /path/to/repo
 ```
 
 Lists how many `node_modules` folders exist and how many subdirectories each has.
@@ -47,10 +47,10 @@ Lists how many `node_modules` folders exist and how many subdirectories each has
 
 ```bash
 # Default action is delete
-clean-node-modules /path/to/monorepo
+clean-node-module /path/to/monorepo
 
 # Or explicitly:
-clean-node-modules delete .
+clean-node-module delete .
 ```
 
 Recursively purges every `node_modules` folder under the specified path.
