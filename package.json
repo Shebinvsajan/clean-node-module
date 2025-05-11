@@ -1,0 +1,29 @@
+{
+  "name": "clean-node-module",
+  "version": "1.0.4",
+  "type": "module",
+  "description": "Recursively purge all node_modules folders",
+  "main": "clean-node-module.js",
+  "bin": {
+    "clean-node-module": "clean-node-module.js"
+  },
+  "scripts": {
+    "test": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Shebinvsajan/clean-node-module.git"
+  },
+  "keywords": [
+    "cleanup",
+    "node_modules",
+    "cli",
+    "npm"
+  ],
+  "author": "shebin",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Shebinvsajan/clean-node-module/issues"
+  },
+  "homepage": "https://github.com/Shebinvsajan/clean-node-module#readme"
+}
