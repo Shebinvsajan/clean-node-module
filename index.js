@@ -15,8 +15,8 @@
  * If [path] is omitted, defaults to current directory.
  */
 
-import { readdir, stat, rm } from 'fs/promises';
-import { join } from 'path';
+import { readdir, stat, rm } from "fs/promises";
+import { join } from "path";
 
 async function findNodeModules(dir, results = []) {
   let entries;
@@ -29,7 +29,7 @@ async function findNodeModules(dir, results = []) {
   for (const entry of entries) {
     const fullPath = join(dir, entry.name);
     if (entry.isDirectory()) {
-      if (entry.name === 'node_modules') {
+      if (entry.name === "node_modules") {
         results.push(fullPath);
       } else {
         await findNodeModules(fullPath, results);
@@ -61,15 +61,38 @@ async function getDirSize(dir) {
   return total;
 }
 
+function formatBytes(bytes, decimals = 2) {
+  if (bytes === 0) return "0 B";
+
+  const k = 1024;
+  const dm = decimals < 0 ? 0 : decimals;
+  const units = ["B", "KB", "MB", "GB", "TB", "PB"];
+
+  // find the largest unit we can use
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+
+  // calculate the adjusted number and fix decimals
+  const sized = bytes / Math.pow(k, i);
+  return `${sized.toFixed(dm)} ${units[i]}`;
+}
+
 async function runSize(paths) {
+  let totalSize = 0;
   for (const p of paths) {
     const size = await getDirSize(p);
-    console.log(`📦 ${p}: ${ (size/1024/1024).toFixed(2) } MB`);
+    totalSize += size;
+    console.log(`📦 ${p}: ${formatBytes(size)}`);
   }
+
+  console.log(`💻 TOTAL SIZE: ${formatBytes(totalSize)}`);
 }
 
 async function runCount(paths) {
-  console.log(`🔍 Found ${paths.length} node_modules folder${paths.length !== 1 ? 's' : ''}`);
+  console.log(
+    `🔍 Found ${paths.length} node_modules folder${
+      paths.length !== 1 ? "s" : ""
+    }`
+  );
   for (const p of paths) {
     let entries;
     try {
@@ -77,8 +100,8 @@ async function runCount(paths) {
     } catch {
       entries = [];
     }
-    const dirs = entries.filter(e => e.isDirectory()).length;
-    console.log(`📂 ${p}: contains ${dirs} subfolder${dirs !== 1 ? 's' : ''}`);
+    const dirs = entries.filter((e) => e.isDirectory()).length;
+    console.log(`📂 ${p}: contains ${dirs} subfolder${dirs !== 1 ? "s" : ""}`);
   }
 }
 
@@ -91,33 +114,36 @@ async function runDelete(paths) {
       console.error(`❌ Failed to delete ${p}: ${err.message}`);
     }
   }
-  console.log(`✅ Done deleting ${paths.length} node_modules folder${paths.length !== 1 ? 's' : ''}.`);
+  console.log(
+    `✅ Done deleting ${paths.length} node_modules folder${
+      paths.length !== 1 ? "s" : ""
+    }.`
+  );
 }
 
 async function main() {
-  const action = process.argv[2] || 'delete';
-  const target = process.argv[3] || '.';
+  const action = process.argv[2] || "delete";
+  const target = process.argv[3] || ".";
   const nodeModulesPaths = await findNodeModules(target);
 
   switch (action) {
-    case 'size':
+    case "size":
       await runSize(nodeModulesPaths);
       break;
-    case 'count':
+    case "count":
       await runCount(nodeModulesPaths);
       break;
-    case 'delete':
+    case "delete":
       await runDelete(nodeModulesPaths);
       break;
     default:
       console.error(`Unknown action: ${action}`);
-      console.error('Valid actions are: size, count, delete');
+      console.error("Valid actions are: size, count, delete");
       process.exit(1);
   }
 }
 
-main().catch(err => {
-  console.error('Unexpected error:', err);
+main().catch((err) => {
+  console.error("Unexpected error:", err);
   process.exit(1);
 });
-
